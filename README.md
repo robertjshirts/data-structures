@@ -1,6 +1,48 @@
 # Data Structures
 This is my personal implementation of some data structures to prove my competence with them.
-The only external package I used was the "testing" package to test each data structure
+The only external packages I used was the "testing" package to test each data structure, and fmt to format generics to strings.
+
+
+## Getting Started
+
+To get started, you'll need Golang installed on your system. The project was build with Go1.21.6, but might work with older versions.
+Once you have Go set up, you can clone the repo and naviage to it
+
+```bash
+git clone https://github.com/robertjshirts/data-structures.git
+cd data-structures
+```
+
+Currently, I only run the project by running my test files, as there is no code in my main.go file. To run the tests, use the following command
+```bash
+go test ./...
+```
+
+## Data Structures Implemented
+- [ ] Key Value Pairs
+  - [x] Implementation
+  - [x] Tests 
+- [ ] Dictionaries 
+  - [x] Implementation 
+  - [ ] Tests 
+- [x] Linked Lists 
+  - [x] Singly Linked 
+    - [x] Implementation 
+    - [x] Tests
+  - [x] Doubly Linked
+    - [x] Implementation
+    - [x] Tests
+- [ ] Tuples (might drop)
+  - [ ] Implementation
+  - [ ] Tests
+- [ ] Stacks
+  - [ ] Implementation
+  - [ ] Tests
+- [ ] Queues
+  - [ ] Implementation
+  - [ ] Tests
+
 
 # TODO
-- Update single_linked to use panics and consistent return values
+- Update tests to use modern sub testing and tables. Look into that.
+- Update single_linked_tests with more descriptive and singular test names

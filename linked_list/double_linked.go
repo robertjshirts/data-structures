@@ -15,7 +15,10 @@ type doubleLinkedList[T comparable] struct {
 }
 
 // EmptyDoubleLinkedList creates an empty list with no head
-// Big-O is O(1) because there aren't any for loops
+//
+// Returns a list with no head or tail and a count of 0.
+//
+// Big-O is O(1) because we're just instantiating a new node
 func EmptyDoubleLinkedList[T comparable]() doubleLinkedList[T] {
 	return doubleLinkedList[T]{
 		Head:  nil,
@@ -25,7 +28,10 @@ func EmptyDoubleLinkedList[T comparable]() doubleLinkedList[T] {
 }
 
 // NewDoubleLinkedList creates a list with a first node
-// Big-O is O(1) because there aren't any for loops or data to iterate over
+//
+// Returns a list with a single node with the value of firstItem.
+//
+// Big-O is O(1) because we're just instantiating a new node
 func NewDoubleLinkedList[T comparable](firstItem T) doubleLinkedList[T] {
 	Node := doubleNode[T]{
 		Value: firstItem,
@@ -39,7 +45,8 @@ func NewDoubleLinkedList[T comparable](firstItem T) doubleLinkedList[T] {
 	}
 }
 
-// Add adds a value to the END list
+// Add adds a value to the end of a list. Will reassign head and tail if they're nil.
+//
 // Big-O is O(1) because we just change the tail pointers around
 func (s *doubleLinkedList[T]) Add(item T) {
 	newNode := &doubleNode[T]{
@@ -62,6 +69,9 @@ func (s *doubleLinkedList[T]) Add(item T) {
 }
 
 // Insert inserts a value at the specified index
+//
+// Panics if the index is out of bounds.
+//
 // Big-O is O(n) because s.GetNode is O(n) and the rest of the expressions are constant
 func (s *doubleLinkedList[T]) Insert(value T, index int) {
 	// If index out of bounds, panic
@@ -104,12 +114,22 @@ func (s *doubleLinkedList[T]) Insert(value T, index int) {
 }
 
 // Get returns the value at the specified index
+//
+// Returns the value at the specified index.
+//
+// Panics if the index is out of bounds.
+//
 // Big-O is O(n) because s.GetNode is O(n)
 func (s *doubleLinkedList[T]) Get(index int) T {
 	return s.GetNode(index).Value
 }
 
 // Remove removes the head node returns its value
+//
+// Returns the value of the head node.
+//
+// Panics if the list is empty.
+//
 // Big-O is O(1) because we're just reassigning the head node
 func (s *doubleLinkedList[T]) Remove() T {
 	if s.Count == 0 {
@@ -134,6 +154,11 @@ func (s *doubleLinkedList[T]) Remove() T {
 }
 
 // RemoveAt removes a node at the specified index and returns its value
+//
+// Returns the value of the removed node.
+//
+// Panics if the index is out of bounds.
+//
 // Big-O is O(n) because it calls s.GetNode which is O(n)
 func (s *doubleLinkedList[T]) RemoveAt(index int) T {
 	// If index is 0 just call remove, don't decrement bc its alr handled
@@ -158,6 +183,11 @@ func (s *doubleLinkedList[T]) RemoveAt(index int) T {
 }
 
 // RemoveLast removes the tail node and returns its value
+//
+// Returns the value of the tail node.
+//
+// Panics if the list is empty.
+//
 // Big-O is O(1) because we are just reassigning pointers
 func (s *doubleLinkedList[T]) RemoveLast() T {
 	if s.Count == 0 {
@@ -182,6 +212,7 @@ func (s *doubleLinkedList[T]) RemoveLast() T {
 }
 
 // Clear removes all nodes from the list
+//
 // Big-O is O(1) because we're just reassigning pointers
 func (s *doubleLinkedList[T]) Clear() {
 	s.Head = nil
@@ -190,6 +221,9 @@ func (s *doubleLinkedList[T]) Clear() {
 }
 
 // Search searches for a value in the list and returns its index
+//
+// Returns the index of the value if found, -1 otherwise.
+//
 // Big-O is O(n) because there is a for loop that iterates over the list
 func (s *doubleLinkedList[T]) Search(value T) int {
 	currentNode := s.Head
@@ -202,7 +236,12 @@ func (s *doubleLinkedList[T]) Search(value T) int {
 	return -1
 }
 
-// GetNode returns the node at the specified index
+// GetNode finds and returns the node at the specified index
+//
+// Returns a pointer to the node at the specified index.
+//
+// Panics if the index is out of bounds.
+//
 // Big-O is O(n) because there is a for loop that iterates over the list
 func (s *doubleLinkedList[T]) GetNode(index int) *doubleNode[T] {
 	if index < 0 || index >= s.Count {
@@ -217,12 +256,12 @@ func (s *doubleLinkedList[T]) GetNode(index int) *doubleNode[T] {
 	return node
 }
 
-// ToString returns a string represntation of the items in the list.
+// ToString converts the list to a string
 //
-// Returns values in the following format: "1 2 3 4".
-// Returns an empty string if the list is empty, not a nil pointer.
+// Returns a string representation of the list in the following format: "1 2 3 4".
+// Will return an empty string if the list is empty, not a nil pointer.
 //
-// Big-O is O(n) because there is a for loop that iterates over the list.
+// Big-O is O(n) because it will have to iterate through the list
 func (s *doubleLinkedList[T]) ToString() string {
 	// Add this here so we can use the substring at the bottom w/o panicking
 	if s.Head == nil {

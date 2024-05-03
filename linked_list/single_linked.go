@@ -12,8 +12,11 @@ type singleLinkedList[T comparable] struct {
 	Count int
 }
 
-// Creates an empty list with no head
-// Big-O is O(1) because the only operation we're doing is returning a struct
+// EmptySingleLinkedList creates an empty list with no head
+//
+// Returns a list with no head and a count of 0
+//
+// Big-O is O(1) because we're just instantiating a new node
 func EmptySingleLinkedList[T comparable]() singleLinkedList[T] {
 	return singleLinkedList[T]{
 		Head:  nil,
@@ -21,8 +24,11 @@ func EmptySingleLinkedList[T comparable]() singleLinkedList[T] {
 	}
 }
 
-// Creates a list with a first node
-// Big-) is O(1) because there aren'T comparable for loops or data to iterate over
+// NewSingleLinkedList creates a list with a first node
+//
+// Returns a list with a single node with the value of firstItem
+//
+// Big-O is O(1) because we're just instantiating a new node
 func NewSingleLinkedList[T comparable](firstItem T) singleLinkedList[T] {
 	Head := node[T]{
 		Value: firstItem,
@@ -34,8 +40,9 @@ func NewSingleLinkedList[T comparable](firstItem T) singleLinkedList[T] {
 	}
 }
 
-// Adds a value to the END list
-// Big-O is O(n) becasue s.GetNode is O(n) and the rest are constant
+// Add adds a value to the end of the list. Will reassign head if it's nil.
+//
+// Big-O is O(n) because it calls s.GetNode which is O(n) and the rest is just changing around pointers
 func (s *singleLinkedList[T]) Add(item T) {
 	newNode := node[T]{
 		Value: item,
@@ -53,9 +60,17 @@ func (s *singleLinkedList[T]) Add(item T) {
 	s.Count++
 }
 
-// Inserts a value at the specified index
-// Big-O is O(n) because s.GetNode is O(n) and the rest of the expressions are constnant
+// Insert inserts a value at the specified index
+//
+// Panics if the index is out of bounds
+//
+// Big-O is O(n) because s.GetNode is O(n) and the rest is just reassigning pointers
 func (s *singleLinkedList[T]) Insert(value T, index int) {
+	// If index is out of bounds, panic
+	if index > s.Count || index < 0 {
+		panic("Index out of bounds!")
+	}
+
 	// If insert at index 0, change head
 	if index == 0 {
 		s.Head = &node[T]{
@@ -65,33 +80,37 @@ func (s *singleLinkedList[T]) Insert(value T, index int) {
 		return
 	}
 
-	newNode := node[T]{
+	newNode := &node[T]{
 		Value: value,
 		Next:  nil,
 	}
 
-	// Pass one less than the index, we are trying to find the node
-	// before our insert so we can change that node's
-	currentNode := s.GetNode(index - 1)
+	// Find previous node
+	prevNode := s.GetNode(index - 1)
+	// Assign newNode's pointer
+	newNode.Next = prevNode.Next
+	// Assign previousNode's pointer
+	prevNode.Next = newNode
+
 	s.Count++
-
-	// Assign current node;s pointer to our new node's pointer
-	// So now the new node points to where the currentNode used to point
-	newNode.Next = currentNode.Next
-
-	// Assign currentNode's pointer to the new node we just inserted
-	// Now currentNode points to newNode points to (the old) currentNode.Next
-	currentNode.Next = &newNode
 }
 
-// Get the value at the specified index, and return it
+// Get returns the value at the specified index
+//
+// Returns the value at the specified index
+//
+// Panics if the index is out of bounds
+//
 // Big-O is O(n) becuase s.GetNode is O(n) and the rest are constant
 func (s *singleLinkedList[T]) Get(index int) T {
 	return s.GetNode(index).Value
 }
 
-// Return the value of the head and remove it from the list
-// Big-O is O(1) because all the operations are constant, and there are no for loops or iterations
+// Remove removes the head node and returns its value
+//
+// Returns the value of the head node
+//
+// Big-O is O(1) because it's just reassigning the head
 func (s *singleLinkedList[T]) Remove() T {
 	if s.Head == nil {
 		panic("No element")
@@ -102,9 +121,15 @@ func (s *singleLinkedList[T]) Remove() T {
 	return head.Value
 }
 
-// Return the value at specified index and remove it from the list
-// Big-O is O(n) because it calls s.GetNode which is O(n)
+// RemoveAt removes the node at the specified index and returns its value
+//
+// Returns the value of the node at the specified index
+//
+// Panics if the index is out of bounds.
+//
+// Big-O is O(n) because it calls s.GetNode which is O(n) and the rest is just reassigning pointers
 func (s *singleLinkedList[T]) RemoveAt(index int) T {
+	// No need to panic explicitly because GetNode & Remove will do it
 	if index == 0 {
 		// If index is 0, just call Remove
 		// Don't decrement because Remove does it
@@ -119,22 +144,34 @@ func (s *singleLinkedList[T]) RemoveAt(index int) T {
 	return removedNode.Value
 }
 
-// Returns the value at the end of the list and removes it
+// RemoveLast removes the last node and returns its value
+//
+// Returns the value of the last node
+//
+// Panics if the list is empty
+//
 // Big-O is O(n) because it calls s.RemoveAt which is O(n)
 func (s *singleLinkedList[T]) RemoveLast() T {
 	// Don't decrement bc RemoveAt does it
+	if s.Count == 0 {
+		panic("No elements in list")
+	}
 	return s.RemoveAt(s.Count - 1)
 }
 
-// Clears the list
-// Big-O is O(1) because it's just setting the head to nil
+// Clear clears the list by setting the head to nil and count to 0
+//
+// Big-O is O(1) because it's just reassigning the head and count
 func (s *singleLinkedList[T]) Clear() {
 	s.Head = nil
 	s.Count = 0
 }
 
-// Searches for the value in the list and returns the index
-// Big-O is O(n) because it will have to iterate through the list
+// Search searches for a value in the list and returns its index
+//
+// Returns the index of the value if found, -1 if not found
+//
+// Big-O is O(n) because it will have to for loop through each
 func (s *singleLinkedList[T]) Search(value T) int {
 	currentNode := s.Head
 	for i := 0; i < s.Count; i++ {
@@ -149,9 +186,13 @@ func (s *singleLinkedList[T]) Search(value T) int {
 	return -1
 }
 
-// Get the node at the specified index, and return it
-// Big-O is O(n) because it will have to for loop through each
-// element to possibly get the last one
+// GetNode finds and returns the node at the specified index
+//
+// Returns a pointer to the node at the specified index
+//
+// Panics if the index is out of bounds
+//
+// Big-O is O(n) because it will have to iterate through the list
 func (s *singleLinkedList[T]) GetNode(index int) *node[T] {
 	if index > (s.Count-1) || index < 0 {
 		panic("Index out of bounds!")
@@ -167,6 +208,12 @@ func (s *singleLinkedList[T]) GetNode(index int) *node[T] {
 	return currentNode
 }
 
+// ToString converts the list to a string
+//
+// Returns a string representation of the list in the following format: "1 2 3 4".
+// Will return an empty string if the list is empty, not a nil pointer.
+//
+// Big-O is O(n) because it will have to iterate through the list
 func (s *singleLinkedList[T]) ToString() string {
 	var result string
 	currentNode := s.Head
