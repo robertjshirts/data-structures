@@ -19,12 +19,12 @@ go test ./...
 ```
 
 ## Data Structures Implemented
-- [ ] Key Value Pairs
+- [x] Key Value Pairs
   - [x] Implementation
   - [x] Tests 
-- [ ] Dictionaries 
+- [x] Dictionaries 
   - [x] Implementation 
-  - [ ] Tests 
+  - [x] Tests 
 - [x] Linked Lists 
   - [x] Singly Linked 
     - [x] Implementation 
@@ -32,9 +32,9 @@ go test ./...
   - [x] Doubly Linked
     - [x] Implementation
     - [x] Tests
-- [ ] Tuples (might drop)
-  - [ ] Implementation
-  - [ ] Tests
+- [x] Binary Tree
+  - [x] Implementation
+  - [x] Testing
 - [ ] Stacks
   - [ ] Implementation
   - [ ] Tests
