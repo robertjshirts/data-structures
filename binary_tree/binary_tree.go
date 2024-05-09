@@ -83,7 +83,7 @@ func (bt *BinaryTree[T]) Clear() {
 
 // InOrder returns the values of the tree in order
 //
-// # Returns a string representation of the tree in order
+// # Returns a slice of the tree in order
 //
 // Time complexity: O(n)
 // Because we have to visit every node, the time complexity is O(n)
@@ -107,12 +107,10 @@ func (bt *BinaryTree[T]) inOrder(node *node[T]) []T {
 
 // Remove removes a node
 //
-//
-//
+// Psuedo code:
 // If 0 children - set parent left/right pointer to null
 // if 1 child - set parent left/right pointer to child
 // if 2 children
-//   if deleling left, find largest value
-//   if deleting right find smallest
+//   if deleling left/right find largest/smallest (respectively)
 //   replace deleted node with that value
-//   call remove on left/right with value
+//   call remove on left/right with value (recurse)

@@ -32,12 +32,12 @@ go test ./...
   - [x] Doubly Linked
     - [x] Implementation
     - [x] Tests
-- [x] Binary Tree
+- [x] Binary Tree (simple)
   - [x] Implementation
   - [x] Testing
-- [ ] Stacks
-  - [ ] Implementation
-  - [ ] Tests
+- [x] Stacks
+  - [x] Implementation
+  - [x] Tests
 - [ ] Queues
   - [ ] Implementation
   - [ ] Tests
@@ -45,4 +45,3 @@ go test ./...
 
 # TODO
 - Update tests to use modern sub testing and tables. Look into that.
-- Update single_linked_tests with more descriptive and singular test names
