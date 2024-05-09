@@ -45,6 +45,20 @@ func NewDoubleLinkedList[T comparable](firstItem T) DoubleLinkedList[T] {
 	}
 }
 
+// Push adds an item to the start of the list
+//
+// Big-O is O(1) because we're just reassigning the head
+func (s *DoubleLinkedList[T]) Push(item T) {
+	newNode := doubleNode[T]{
+		Value: item,
+		Next:  s.Head,
+		Prev:  nil,
+	}
+	s.Head.Prev = &newNode
+	s.Head = &newNode
+	s.Count++
+}
+
 // Add adds a value to the end of a list. Will reassign head and tail if they're nil.
 //
 // Big-O is O(1) because we just change the tail pointers around

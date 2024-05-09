@@ -1,21 +1,26 @@
 package stack
 
-import (
-	"github.com/robertjshirts/data-structures/linked_list"
-)
+import "github.com/robertjshirts/data-structures/linked_list"
 
-type stack[T comparable] struct {
+type Stack[T comparable] struct {
 	list *linked_list.SingleLinkedList[T]
 }
 
-func NewStack[T comparable]() *stack[T] {
+func NewStack[T comparable]() *Stack[T] {
 	list := linked_list.EmptySingleLinkedList[T]()
-	return &stack[T]{
+	return &Stack[T]{
 		list: &list,
 	}
 }
 
-func (s *stack[T]) Push(value T) {
+// Push adds a value to the top of the stack
+//
+// # Arguments
+// value: The value to add to the stack
+//
+// Time complexity: O(1)
+// Because list.Push is O(1), the time complexity is O(1)
+func (s *Stack[T]) Push(value T) {
 	s.list.Push(value)
 }
 
@@ -26,7 +31,7 @@ func (s *stack[T]) Push(value T) {
 // Time complexity: O(1)
 // Because we're just removing the first value in the list, the time complexity is O(1)
 // Also s.list.Remove() is O(1) because we're just removing the first value in the list
-func (s *stack[T]) Pop() *T {
+func (s *Stack[T]) Pop() *T {
 	if s.list.Head == nil {
 		return nil
 	}
@@ -41,7 +46,7 @@ func (s *stack[T]) Pop() *T {
 //
 // Time complexity: O(1)
 // Because we're just getting the first value in the list, the time complexity is O(1)
-func (s *stack[T]) Peek() *T {
+func (s *Stack[T]) Peek() *T {
 	if s.list.Head == nil {
 		return nil
 	}
@@ -55,7 +60,7 @@ func (s *stack[T]) Peek() *T {
 //
 // Time complexity: O(n)
 // Because it calls list.Get(), which has a complexity of O(n)
-func (s *stack[T]) Get(index int) *T {
+func (s *Stack[T]) Get(index int) *T {
 	if index < 0 || index >= s.list.Count {
 		return nil
 	}
@@ -78,7 +83,7 @@ func (s *stack[T]) Get(index int) *T {
 //	return false
 //
 // return s.List.Search(value) != -1
-func (s *stack[T]) Contains(value T) bool {
+func (s *Stack[T]) Contains(value T) bool {
 	if s.list.Count == 0 {
 		return false
 	}

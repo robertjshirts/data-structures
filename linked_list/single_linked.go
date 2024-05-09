@@ -14,7 +14,7 @@ type SingleLinkedList[T comparable] struct {
 
 // EmptySingleLinkedList creates an empty list with no head
 //
-// Returns a list with no head and a count of 0
+// # Returns a list with no head and a count of 0
 //
 // Big-O is O(1) because we're just instantiating a new node
 func EmptySingleLinkedList[T comparable]() SingleLinkedList[T] {
@@ -26,7 +26,7 @@ func EmptySingleLinkedList[T comparable]() SingleLinkedList[T] {
 
 // NewSingleLinkedList creates a list with a first node
 //
-// Returns a list with a single node with the value of firstItem
+// # Returns a list with a single node with the value of firstItem
 //
 // Big-O is O(1) because we're just instantiating a new node
 func NewSingleLinkedList[T comparable](firstItem T) SingleLinkedList[T] {
@@ -74,7 +74,7 @@ func (s *SingleLinkedList[T]) Add(item T) {
 
 // Insert inserts a value at the specified index
 //
-// Panics if the index is out of bounds
+// # Panics if the index is out of bounds
 //
 // Big-O is O(n) because s.GetNode is O(n) and the rest is just reassigning pointers
 func (s *SingleLinkedList[T]) Insert(value T, index int) {
@@ -109,20 +109,20 @@ func (s *SingleLinkedList[T]) Insert(value T, index int) {
 
 // Get returns the value at the specified index
 //
-// Returns the value at the specified index
+// # Returns the value at the specified index
 //
-// Panics if the index is out of bounds
+// # Panics if the index is out of bounds
 //
-// Big-O is O(n) becuase s.GetNode is O(n) and the rest are constant
+// Big-O is O(n) because s.GetNode is O(n) and the rest are constant
 func (s *SingleLinkedList[T]) Get(index int) T {
 	return s.GetNode(index).Value
 }
 
 // Remove removes the head node and returns its value
 //
-// Returns the value of the head node
+// # Returns the value of the head node
 //
-// Panics if the list is empty
+// # Panics if the list is empty
 //
 // Big-O is O(1) because it's just reassigning the head
 func (s *SingleLinkedList[T]) Remove() T {
@@ -137,7 +137,7 @@ func (s *SingleLinkedList[T]) Remove() T {
 
 // RemoveAt removes the node at the specified index and returns its value
 //
-// Returns the value of the node at the specified index
+// # Returns the value of the node at the specified index
 //
 // Panics if the index is out of bounds.
 //
@@ -160,9 +160,9 @@ func (s *SingleLinkedList[T]) RemoveAt(index int) T {
 
 // RemoveLast removes the last node and returns its value
 //
-// Returns the value of the last node
+// # Returns the value of the last node
 //
-// Panics if the list is empty
+// # Panics if the list is empty
 //
 // Big-O is O(n) because it calls s.RemoveAt which is O(n)
 func (s *SingleLinkedList[T]) RemoveLast() T {
@@ -183,7 +183,7 @@ func (s *SingleLinkedList[T]) Clear() {
 
 // Search searches for a value in the list and returns its index
 //
-// Returns the index of the value if found, -1 if not found
+// # Returns the index of the value if found, -1 if not found
 //
 // Big-O is O(n) because it will have to for loop through each
 func (s *SingleLinkedList[T]) Search(value T) int {
@@ -202,9 +202,9 @@ func (s *SingleLinkedList[T]) Search(value T) int {
 
 // GetNode finds and returns the node at the specified index
 //
-// Returns a pointer to the node at the specified index
+// # Returns a pointer to the node at the specified index
 //
-// Panics if the index is out of bounds
+// # Panics if the index is out of bounds
 //
 // Big-O is O(n) because it will have to iterate through the list
 func (s *SingleLinkedList[T]) GetNode(index int) *node[T] {
