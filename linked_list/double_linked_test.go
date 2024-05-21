@@ -1,74 +1,71 @@
 package linked_list
 
 import (
+	"github.com/robertjshirts/data-structures/util"
 	"testing"
 )
 
 // DLL stands for DoubleLinkedList
 
-func TestEmptyDLLWorksCorrectly(t *testing.T) {
+func TestEmptyDoubleLinkedList(t *testing.T) {
 	// Arrange
 	// Act
 	list := EmptyDoubleLinkedList[int]()
 	// Assert
-	if list.Count != 0 {
-		simpleAssert(t, "Count", 0, list.Count)
-	}
-	if list.Head != nil {
-		simpleAssert(t, "Head", nil, list.Head)
-	}
-	if list.Tail != nil {
-		simpleAssert(t, "Tail", nil, list.Tail)
-	}
+	util.SimpleAssert(t, list.Count, 0)
+	util.NilAssert(t, list.Head)
 }
 
-func TestNewDLLWorksCorrectly(t *testing.T) {
+func TestNewDoubleLinkedList(t *testing.T) {
+	// Arrange
+	expected := 0
+	// Act
+	list := NewDoubleLinkedList(expected)
+	// Assert
+	util.SimpleAssert(t, list.Head.Value, expected)
+}
+
+func TestNewDoubleLinkedListHasCorrectCount(t *testing.T) {
 	// Arrange
 	expected := 5
 	// Act
 	list := NewDoubleLinkedList[int](expected)
 	// Assert
-	if list.Count != 1 {
-		simpleAssert(t, "Count", 1, list.Count)
-	}
-	if list.Head.Value != expected {
-		simpleAssert(t, "Head.Value", expected, list.Head.Value)
-	}
-	if list.Tail.Value != expected {
-		simpleAssert(t, "Tail.Value", expected, list.Tail.Value)
-	}
+	util.SimpleAssert(t, list.Count, 1)
 }
 
-func TestDLLAdd(t *testing.T) {
+func TestDoubleLinkedList_AddAddsNode(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	expected := 1
 	// Act
 	list.Add(expected)
-	actual := list.Head.Next.Value
 	// Assert
-	if list.Head.Next.Value != list.Tail.Value {
-		simpleAssert(t, "Head.Next.Value", list.Tail.Value, list.Head.Next.Value)
-	}
-	if expected != actual {
-		simpleAssert(t, "Head.Next.Value", expected, actual)
-	}
+	util.SimpleAssert(t, list.Tail.Value, expected)
 }
 
-func TestDLLAddWorksOnEmptyList(t *testing.T) {
+func TestDoubleLinkedList_AddChangesCount(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	expected := 2
+	// Act
+	list.Add(1)
+	// Assert
+	util.SimpleAssert(t, list.Count, expected)
+
+}
+
+func TestDoubleLinkedList_AddOnEmptyLinkedList(t *testing.T) {
 	// Arrange
 	list := EmptyDoubleLinkedList[int]()
 	expected := 1
 	// Act
 	list.Add(expected)
-	actual := list.Head.Value
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Head.Value", expected, actual)
-	}
+	util.SimpleAssert(t, list.Head.Value, expected)
 }
 
-func TestDLLInsert(t *testing.T) {
+func TestDoubleLinkedList_InsertInsertsValue(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(2)
@@ -76,28 +73,33 @@ func TestDLLInsert(t *testing.T) {
 	index := 1
 	// Act
 	list.Insert(expected, index)
-	actual := list.Head.Next.Value
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Head.Next.Value", expected, actual)
-	}
+	util.SimpleAssert(t, list.Head.Next.Value, expected)
 }
 
-func TestDLLInsertWorksOnEmptyList(t *testing.T) {
+func TestDoubleLinkedList_InsertChangesCount(t *testing.T) {
 	// Arrange
-	list := EmptyDoubleLinkedList[int]()
+	list := NewDoubleLinkedList(0)
+	list.Add(2)
+	expected := 3
+	// Act
+	list.Insert(1, 1)
+	// Assert
+	util.SimpleAssert(t, list.Count, expected)
+}
+
+func TestDoubleLinkedList_InsertChangesHead(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(1)
+	list.Add(2)
 	expected := 0
 	index := 0
 	// Act
 	list.Insert(expected, index)
-	actual := list.Head.Value
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Head.Value", expected, actual)
-	}
+	util.SimpleAssert(t, list.Head.Value, expected)
 }
-
-func TestDLLInsertWorksOnEndOfList(t *testing.T) {
+func TestDoubleLinkedList_InsertChangesTail(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(1)
@@ -105,14 +107,11 @@ func TestDLLInsertWorksOnEndOfList(t *testing.T) {
 	index := 2
 	// Act
 	list.Insert(expected, index)
-	actual := list.Tail.Value
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Tail.Value", expected, actual)
-	}
+	util.SimpleAssert(t, list.Tail.Value, expected)
 }
 
-func TestDLLInsertPanicsOnInvalidIndex(t *testing.T) {
+func TestDoubleLinkedList_InsertPanicsOnInvalidIndex(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(1)
@@ -120,6 +119,7 @@ func TestDLLInsertPanicsOnInvalidIndex(t *testing.T) {
 	index := 3
 	// Act
 	defer func() {
+		// Assert
 		if r := recover(); r == nil {
 			t.Errorf("The code did not panic")
 		}
@@ -127,22 +127,18 @@ func TestDLLInsertPanicsOnInvalidIndex(t *testing.T) {
 	list.Insert(expected, index)
 }
 
-func TestDLLGet(t *testing.T) {
+func TestDoubleLinkedList_Get(t *testing.T) {
 	// Arrange
-	list := NewDoubleLinkedList(0)
 	expected := 1
-	index := 1
+	list := NewDoubleLinkedList(0)
 	list.Add(expected)
-	list.Add(2)
 	// Act
-	actual := list.Get(index)
+	actual := list.Get(1)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Get", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLGetStartOfList(t *testing.T) {
+func TestDoubleLinkedList_GetStartOfList(t *testing.T) {
 	// Arrange
 	expected := 0
 	index := 0
@@ -152,12 +148,10 @@ func TestDLLGetStartOfList(t *testing.T) {
 	// Act
 	actual := list.Get(index)
 	// Assert
-	if expected != actual || actual != list.Head.Value {
-		simpleAssert(t, "Get", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLGetEndOfList(t *testing.T) {
+func TestDoubleLinkedList_GetEndOfList(t *testing.T) {
 	// Arrange
 	expected := 2
 	index := 2
@@ -167,12 +161,10 @@ func TestDLLGetEndOfList(t *testing.T) {
 	// Act
 	actual := list.Get(index)
 	// Assert
-	if expected != actual || actual != list.Tail.Value {
-		simpleAssert(t, "Get", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLGetPanicsOnInvalidIndex(t *testing.T) {
+func TestDoubleLinkedList_GetPanicsOnInvalidIndex(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(1)
@@ -180,6 +172,7 @@ func TestDLLGetPanicsOnInvalidIndex(t *testing.T) {
 	index := 3
 	// Act
 	defer func() {
+		// Assert
 		if r := recover(); r == nil {
 			t.Errorf("The code did not panic")
 		}
@@ -187,7 +180,23 @@ func TestDLLGetPanicsOnInvalidIndex(t *testing.T) {
 	list.Get(index)
 }
 
-func TestDLLRemoveReturnsCorrectValue(t *testing.T) {
+func TestDoubleLinkedList_GetPanicsOnNegativeIndex(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	list.Add(1)
+	list.Add(2)
+	index := -1
+	// Act
+	defer func() {
+		// Assert
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	list.Get(index)
+}
+
+func TestDoubleLinkedList_RemoveReturnsCorrectValue(t *testing.T) {
 	// Arrange
 	expected := 0
 	list := NewDoubleLinkedList(expected)
@@ -196,12 +205,12 @@ func TestDLLRemoveReturnsCorrectValue(t *testing.T) {
 	// Act
 	actual := list.Remove()
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Remove", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLRemoveChangesHeadAndCount(t *testing.T) {
+// Renaming functions
+
+func TestDoubleLinkedList_RemoveChangesHead(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	expected := 1
@@ -210,15 +219,21 @@ func TestDLLRemoveChangesHeadAndCount(t *testing.T) {
 	// Act
 	list.Remove()
 	// Assert
-	if list.Head.Value != expected {
-		simpleAssert(t, "Head.Value", expected, list.Head.Value)
-	}
-	if list.Count != 2 {
-		simpleAssert(t, "Count", 2, list.Count)
-	}
+	util.SimpleAssert(t, list.Head.Value, expected)
 }
 
-func TestDLLRemovePanicsOnEmptyList(t *testing.T) {
+func TestDoubleLinkedList_RemoveChangesCount(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	list.Add(1)
+	list.Add(2)
+	// Act
+	list.Remove()
+	// Assert
+	util.SimpleAssert(t, list.Count, 2)
+}
+
+func TestDoubleLinkedList_RemovePanicsOnEmptyList(t *testing.T) {
 	// Arrange
 	list := EmptyDoubleLinkedList[int]()
 	// Act
@@ -230,7 +245,7 @@ func TestDLLRemovePanicsOnEmptyList(t *testing.T) {
 	list.Remove()
 }
 
-func TestDLLRemoveAtReturnsCorrectValue(t *testing.T) {
+func TestDoubleLinkedList_RemoveAtReturnsCorrectValue(t *testing.T) {
 	// Arrange
 	expected := 1
 	index := 1
@@ -240,12 +255,10 @@ func TestDLLRemoveAtReturnsCorrectValue(t *testing.T) {
 	// Act
 	actual := list.RemoveAt(index)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "RemoveAt", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLRemoveAtChangesCount(t *testing.T) {
+func TestDoubleLinkedList_RemoveAtChangesCount(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(1)
@@ -254,12 +267,10 @@ func TestDLLRemoveAtChangesCount(t *testing.T) {
 	// Act
 	list.RemoveAt(index)
 	// Assert
-	if list.Count != 2 {
-		simpleAssert(t, "Count", 2, list.Count)
-	}
+	util.SimpleAssert(t, list.Count, 2)
 }
 
-func TestDLLRemoveAtPanicsOnInvalidIndex(t *testing.T) {
+func TestDoubleLinkedList_RemoveAtPanicsOnInvalidIndex(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(1)
@@ -274,21 +285,34 @@ func TestDLLRemoveAtPanicsOnInvalidIndex(t *testing.T) {
 	list.RemoveAt(index)
 }
 
-func TestDLLRemoveLastReturnsCorrectValue(t *testing.T) {
+func TestDoubleLinkedList_RemoveAtPanicsOnNegativeIndex(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(1)
+	list.Add(2)
+	index := -1
+	// Act
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	list.RemoveAt(index)
+}
+
+func TestDoubleLinkedList_RemoveLastReturnsCorrectValue(t *testing.T) {
+	// Arrange
 	expected := 2
+	list := NewDoubleLinkedList(0)
+	list.Add(1)
 	list.Add(expected)
 	// Act
 	actual := list.RemoveLast()
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "RemoveLast", expected, list.Tail.Value)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLRemoveLastChangesTailAndCount(t *testing.T) {
+func TestDoubleLinkedList_RemoveLastChangesTail(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	expected := 1
@@ -297,15 +321,21 @@ func TestDLLRemoveLastChangesTailAndCount(t *testing.T) {
 	// Act
 	list.RemoveLast()
 	// Assert
-	if list.Tail.Value != expected {
-		simpleAssert(t, "Tail.Value", expected, list.Tail.Value)
-	}
-	if list.Count != 2 {
-		simpleAssert(t, "Count", 2, list.Count)
-	}
+	util.SimpleAssert(t, list.Tail.Value, expected)
 }
 
-func TestDLLRemoveLastPanicsOnEmptyList(t *testing.T) {
+func TestDoubleLinkedList_RemoveLastChangesCount(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	list.Add(1)
+	list.Add(2)
+	// Act
+	list.RemoveLast()
+	// Assert
+	util.SimpleAssert(t, list.Count, 2)
+}
+
+func TestDoubleLinkedList_RemoveLastPanicsOnEmptyList(t *testing.T) {
 	// Arrange
 	list := EmptyDoubleLinkedList[int]()
 	// Act
@@ -317,7 +347,7 @@ func TestDLLRemoveLastPanicsOnEmptyList(t *testing.T) {
 	list.RemoveLast()
 }
 
-func TestDLLClearClearsList(t *testing.T) {
+func TestDoubleLinkedList_ClearChangesCount(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(1)
@@ -325,35 +355,43 @@ func TestDLLClearClearsList(t *testing.T) {
 	// Act
 	list.Clear()
 	// Assert
-	if list.Count != 0 {
-		simpleAssert(t, "Count", 0, list.Count)
-	}
-	if list.Head != nil {
-		simpleAssert(t, "Head", nil, list.Head)
-	}
-	if list.Tail != nil {
-		simpleAssert(t, "Tail", nil, list.Tail)
-	}
+	util.SimpleAssert(t, list.Count, 0)
 }
 
-func TestDLLClearClearsListOnEmptyList(t *testing.T) {
+func TestDoubleLinkedList_ClearChangesHead(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	list.Add(1)
+	list.Add(2)
+	// Act
+	list.Clear()
+	// Assert
+	util.NilAssert(t, list.Head)
+}
+
+func TestDoubleLinkedList_ClearChangesTail(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	list.Add(1)
+	list.Add(2)
+	// Act
+	list.Clear()
+	// Assert
+	util.NilAssert(t, list.Tail)
+}
+
+func TestDoubleLinkedList_ClearClearsListOnEmptyList(t *testing.T) {
 	// Arrange
 	list := EmptyDoubleLinkedList[int]()
 	// Act
 	list.Clear()
 	// Assert
-	if list.Count != 0 {
-		simpleAssert(t, "Count", 0, list.Count)
-	}
-	if list.Head != nil {
-		simpleAssert(t, "Head", nil, list.Head)
-	}
-	if list.Tail != nil {
-		simpleAssert(t, "Tail", nil, list.Tail)
-	}
+	util.SimpleAssert(t, list.Count, 0)
+	util.NilAssert(t, list.Head)
+	util.NilAssert(t, list.Tail)
 }
 
-func TestDLLSearchReturnsCorrectIndex(t *testing.T) {
+func TestDoubleLinkedList_SearchReturnsCorrectIndex(t *testing.T) {
 	// Arrange
 	value := 1
 	expected := 1
@@ -364,12 +402,10 @@ func TestDLLSearchReturnsCorrectIndex(t *testing.T) {
 	// Act
 	actual := list.Search(value)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Search", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLReturnsMinusOneIfNotInList(t *testing.T) {
+func TestDoubleLinkedList_SearchReturnsMinusOneIfNotFound(t *testing.T) {
 	// Arrange
 	value := 4
 	expected := -1
@@ -380,12 +416,10 @@ func TestDLLReturnsMinusOneIfNotInList(t *testing.T) {
 	// Act
 	actual := list.Search(value)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Search", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLSearchReturnsMinusOneOnEmptyList(t *testing.T) {
+func TestDoubleLinkedList_SearchReturnsMinusOneOnEmptyList(t *testing.T) {
 	// Arrange
 	value := 1
 	expected := -1
@@ -393,33 +427,81 @@ func TestDLLSearchReturnsMinusOneOnEmptyList(t *testing.T) {
 	// Act
 	actual := list.Search(value)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "Search", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLToString(t *testing.T) {
+func TestDoubleLinkedList_GetNodeReturnsCorrectNode(t *testing.T) {
+	// Arrange
+	expected := 1
+	list := NewDoubleLinkedList(0)
+	list.Add(expected)
+	list.Add(2)
+	list.Add(3)
+	// Act
+	actual := list.GetNode(1)
+	// Assert
+	util.SimpleAssert(t, actual.Value, expected)
+}
+
+func TestDoubleLinkedList_GetNodePanicsOnInvalidIndex(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	list.Add(1)
+	index := 3
+	// Act
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	list.GetNode(index)
+}
+
+func TestDoubleLinkedList_GetNodePanicsOnNegativeIndex(t *testing.T) {
 	// Arrange
 	list := NewDoubleLinkedList(0)
 	list.Add(1)
 	list.Add(2)
-	expected := "0 1 2"
+	list.Add(3)
+	index := -1
+	// Act
+	defer func() {
+		if r := recover(); r == nil {
+			t.Errorf("The code did not panic")
+		}
+	}()
+	list.GetNode(index)
+}
+
+func TestDoubleLinkedList_ToStringWorks(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	list.Add(1)
+	list.Add(2)
+	list.Add(3)
+	expected := "0 1 2 3"
 	// Act
 	actual := list.ToString()
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "ToString", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestDLLToStringWorksOnEmptyList(t *testing.T) {
+func TestDoubleLinkedList_ToStringWorksOnSingleElementList(t *testing.T) {
+	// Arrange
+	list := NewDoubleLinkedList(0)
+	expected := "0"
+	// Act
+	actual := list.ToString()
+	// Assert
+	util.SimpleAssert(t, actual, expected)
+}
+
+func TestDoubleLinkedList_ToStringWorksOnEmptyList(t *testing.T) {
 	// Arrange
 	list := EmptyDoubleLinkedList[int]()
 	expected := ""
 	// Act
 	actual := list.ToString()
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "ToString", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }

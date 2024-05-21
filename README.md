@@ -32,16 +32,20 @@ go test ./...
   - [x] Doubly Linked
     - [x] Implementation
     - [x] Tests
-- [x] Binary Tree (simple)
-  - [x] Implementation
-  - [x] Testing
 - [x] Stacks
   - [x] Implementation
   - [x] Tests
-- [ ] Queues
+- [x] Queues
+  - [x] Implementation
+  - [x] Tests
+- [x] Binary Tree
+  - [x] Implementation
+  - [x] Testing
+- [ ] AVL Tree
   - [ ] Implementation
-  - [ ] Tests
+  - [ ] Testing
 
 
 # TODO
+- Add maze solver/graph
 - Update tests to use modern sub testing and tables. Look into that.

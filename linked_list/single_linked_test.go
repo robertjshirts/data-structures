@@ -1,35 +1,30 @@
 package linked_list
 
-import "testing"
+import (
+	"github.com/robertjshirts/data-structures/util"
+	"testing"
+)
 
-func TestNewListAndHeadValue(t *testing.T) {
+func TestNewSingleLinkedList(t *testing.T) {
 	// Arrange
 	expected := "the first value"
 	// Act
 	list := NewSingleLinkedList(expected)
 	// Assert
-	if list.Head.Value != expected {
-		simpleAssert(t, "list.Head.Value", expected, list.Head.Value)
-	}
-	if list.Head.Next != nil {
-		simpleAssert(t, "list.Head.Next", "nil", "something else lol")
-	}
+	util.SimpleAssert(t, list.Head.Value, expected)
+	util.NilAssert(t, list.Head.Next)
 }
 
-func TestEmptyList(t *testing.T) {
+func TestEmptySingleLinkedList(t *testing.T) {
 	// Arrange
 	// Act
 	list := EmptySingleLinkedList[string]()
 	// Assert
-	if list.Head != nil {
-		simpleAssert(t, "list.Head", "nil", "something else lol")
-	}
-	if list.Count != 0 {
-		simpleAssert(t, "list.Count", 0, list.Count)
-	}
+	util.NilAssert(t, list.Head)
+	util.SimpleAssert(t, list.Count, 0)
 }
 
-func TestListAdd(t *testing.T) {
+func TestSingleLinkedList_Add(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList("first value")
 	expected := "expected value"
@@ -37,12 +32,10 @@ func TestListAdd(t *testing.T) {
 	list.Add(expected)
 	actual := list.Head.Next.Value
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Head.Next.Value", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListAddCount(t *testing.T) {
+func TestSingleLinkedList_AddChangesCount(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList("first value")
 	expected := 2
@@ -50,51 +43,45 @@ func TestListAddCount(t *testing.T) {
 	list.Add("second value")
 	actual := list.Count
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Count", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListAddMultiple(t *testing.T) {
+func TestSingleLinkedList_AddMultipleNodes(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList("first value")
 	list.Add("second value")
-	list.Add("third value")
 	expected := "third value"
 	// Act
+	list.Add(expected)
 	actual := list.Head.Next.Next.Value
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Head.Next.Next.Value", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestGetNode(t *testing.T) {
+func TestSingleLinkedList_GetNode(t *testing.T) {
 	// Arrange
 	value := "value"
 	list := NewSingleLinkedList(value)
 	// Act
 	actual := list.GetNode(0)
 	// Assert
-	if actual != list.Head {
-		simpleAssert(t, "list.GetNode(0)", "list.Head", "something else lmao")
-	}
+	util.SimpleAssert(t, actual, list.Head)
 }
 
-func TestGetNodeOutOfBoundsPanics(t *testing.T) {
+func TestSingleLinkedList_GetNodePanicsOnInvalidIndex(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList("value")
 	defer func() {
+		// Assert
 		if r := recover(); r == nil {
-			simpleAssert(t, "list.GetNode(1)", "panic", "no panic")
+			t.Errorf("The code did not panic")
 		}
 	}()
 	// Act
 	list.GetNode(1)
-	// Should panic, so we have to recover with the previously deffered function
 }
 
-func TestListInsert(t *testing.T) {
+func TestSingleLinkedList_Insert(t *testing.T) {
 	// Arrange
 	expected := "second value"
 	index := 1
@@ -104,12 +91,10 @@ func TestListInsert(t *testing.T) {
 	list.Insert(expected, index)
 	actual := list.Get(index)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Insert(1)", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListInsertAtZero(t *testing.T) {
+func TestSingleLinkedList_InsertAtZero(t *testing.T) {
 	// Arrange
 	index := 0
 	list := NewSingleLinkedList(1)
@@ -119,26 +104,23 @@ func TestListInsertAtZero(t *testing.T) {
 	list.Insert(0, index)
 	actual := list.Get(index)
 	// Assert
-	if actual != 0 {
-		simpleAssert(t, "list.Insert(0)", 0, actual)
-	}
+	util.SimpleAssert(t, actual, 0)
 }
 
-func TestListInsertOutOfBoundsPanics(t *testing.T) {
+func TestSingleLinkedList_InsertPanicsOnInvalidIndex(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList(1)
 	defer func() {
+		// Assert
 		if r := recover(); r == nil {
-			simpleAssert(t, "list.Insert(X, 1)", "panic", "no panic")
+			t.Errorf("The code did not panic")
 		}
 	}()
 	// Act
-	// Insert val 2 at index 3, far out of bounds
 	list.Insert(2, 3)
-	// Should panic, so we have to recover with the previously deffered function
 }
 
-func TestListInsertCount(t *testing.T) {
+func TestSingleLinkedList_InsertChangesCount(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList(1)
 	list.Add(2)
@@ -148,12 +130,10 @@ func TestListInsertCount(t *testing.T) {
 	list.Insert(4, 3)
 	actual := list.Count
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Count", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListGet(t *testing.T) {
+func TestSingleLinkedList_Get(t *testing.T) {
 	// Arrange
 	expected := "second value"
 	list := NewSingleLinkedList("first value")
@@ -161,25 +141,23 @@ func TestListGet(t *testing.T) {
 	// Act
 	actual := list.Get(1)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Get(1)", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListGetOutOfBoundsPanics(t *testing.T) {
+func TestSingleLinkedList_GetPanicsOnInvalidIndex(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList(1)
 	defer func() {
+		// Assert
 		if r := recover(); r == nil {
-			simpleAssert(t, "list.Get(1)", "panic", "no panic")
+			t.Errorf("The code did not panic")
 		}
 	}()
 	// Act
 	list.Get(1)
-	// Should panic, so we have to recover with the previously deffered function
 }
 
-func TestListRemoveReturnsCorrectValue(t *testing.T) {
+func TestSingleLinkedList_RemoveReturnsCorrectValue(t *testing.T) {
 	// Arrange
 	expected := 1
 	list := NewSingleLinkedList(expected)
@@ -188,12 +166,10 @@ func TestListRemoveReturnsCorrectValue(t *testing.T) {
 	// Act
 	actual := list.Remove()
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Remove()", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListRemoveRemovesNode(t *testing.T) {
+func TestSingleLinkedList_RemoveChangesCount(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList(1)
 	list.Add(2)
@@ -203,12 +179,10 @@ func TestListRemoveRemovesNode(t *testing.T) {
 	list.Remove()
 	actual := list.Count
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Count", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListRemoveAtReturnsCorrectValue(t *testing.T) {
+func TestSingleLinkedList_RemoveAtReturnsCorrectValue(t *testing.T) {
 	// Arrange
 	expected := 2
 	list := NewSingleLinkedList(1)
@@ -217,12 +191,10 @@ func TestListRemoveAtReturnsCorrectValue(t *testing.T) {
 	// Act
 	actual := list.RemoveAt(1)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.RemoveAt(1)", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListRemoveAtRemovesNode(t *testing.T) {
+func TestSingleLinkedList_RemoveAtChangesCount(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList(1)
 	list.Add(2)
@@ -232,12 +204,10 @@ func TestListRemoveAtRemovesNode(t *testing.T) {
 	list.RemoveAt(1)
 	actual := list.Count
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Count", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestRemoveLastReturnsCorrectValue(t *testing.T) {
+func TestSingleLinkedList_RemoveLastReturnsCorrectValue(t *testing.T) {
 	// Arrange
 	expected := 3
 	list := NewSingleLinkedList(1)
@@ -246,12 +216,10 @@ func TestRemoveLastReturnsCorrectValue(t *testing.T) {
 	// Act
 	actual := list.RemoveLast()
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.RemoveLast()", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestRemoveLastRemovesNode(t *testing.T) {
+func TestSingleLinkedList_RemoveLastChangesCount(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList(1)
 	list.Add(2)
@@ -261,12 +229,10 @@ func TestRemoveLastRemovesNode(t *testing.T) {
 	list.RemoveLast()
 	actual := list.Count
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.RemoveLast()", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListClearClearsList(t *testing.T) {
+func TestSingleLinkedList_ClearChangesCount(t *testing.T) {
 	// Arrange
 	list := NewSingleLinkedList(1)
 	list.Add(2)
@@ -276,12 +242,10 @@ func TestListClearClearsList(t *testing.T) {
 	list.Clear()
 	actual := list.Count
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Clear()", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListSearchReturnsCorrectIndex(t *testing.T) {
+func TestSingleLinkedList_SearchReturnsCorrectIndex(t *testing.T) {
 	// Arrange
 	search := 2
 	expected := 1
@@ -291,12 +255,10 @@ func TestListSearchReturnsCorrectIndex(t *testing.T) {
 	// Act
 	actual := list.Search(search)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Search(2)", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }
 
-func TestListSearchReturnsMinusOneIfNotInList(t *testing.T) {
+func TestSingleLinkedList_SearchReturnsMinusOneIfNotFound(t *testing.T) {
 	// Arrange
 	search := 4
 	expected := -1
@@ -306,7 +268,5 @@ func TestListSearchReturnsMinusOneIfNotInList(t *testing.T) {
 	// Act
 	actual := list.Search(search)
 	// Assert
-	if expected != actual {
-		simpleAssert(t, "list.Search(4)", expected, actual)
-	}
+	util.SimpleAssert(t, actual, expected)
 }

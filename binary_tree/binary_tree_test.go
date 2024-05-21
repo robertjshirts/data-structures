@@ -1,6 +1,9 @@
 package binary_tree
 
-import "testing"
+import (
+	"github.com/robertjshirts/data-structures/util"
+	"testing"
+)
 
 func TestBTNewCreatesRoot(t *testing.T) {
 	// Arrange
@@ -8,7 +11,7 @@ func TestBTNewCreatesRoot(t *testing.T) {
 	// Act
 	bt := NewBinaryTree[int](expected)
 	// Assert
-	simpleAssert(t, expected, bt.Root.value)
+	util.SimpleAssert(t, expected, bt.Root.value)
 }
 
 func TestBTNewCorrectLength(t *testing.T) {
@@ -17,7 +20,7 @@ func TestBTNewCorrectLength(t *testing.T) {
 	// Act
 	bt := NewBinaryTree[int](10)
 	// Assert
-	simpleAssert(t, expected, bt.Count)
+	util.SimpleAssert(t, expected, bt.Count)
 }
 
 func TestBTInsertAddsNodeLeft(t *testing.T) {
@@ -27,7 +30,7 @@ func TestBTInsertAddsNodeLeft(t *testing.T) {
 	// Act
 	bt.Insert(expected)
 	// Assert
-	simpleAssert(t, expected, bt.Root.left.value)
+	util.SimpleAssert(t, expected, bt.Root.left.value)
 }
 
 func TestBTInsertChangesCount(t *testing.T) {
@@ -38,7 +41,7 @@ func TestBTInsertChangesCount(t *testing.T) {
 	bt.Insert(5)
 	bt.Insert(15)
 	// Assert
-	simpleAssert(t, expected, bt.Count)
+	util.SimpleAssert(t, expected, bt.Count)
 }
 
 func TestBTInsertAddsNodeRight(t *testing.T) {
@@ -48,7 +51,7 @@ func TestBTInsertAddsNodeRight(t *testing.T) {
 	// Act
 	bt.Insert(expected)
 	// Assert
-	simpleAssert(t, expected, bt.Root.right.value)
+	util.SimpleAssert(t, expected, bt.Root.right.value)
 }
 
 func TestBTInsertAddsDuplicate(t *testing.T) {
@@ -58,7 +61,7 @@ func TestBTInsertAddsDuplicate(t *testing.T) {
 	// Act
 	bt.Insert(expected)
 	// Assert
-	simpleAssert(t, expected, bt.Root.left.value)
+	util.SimpleAssert(t, expected, bt.Root.left.value)
 }
 
 func TestBTInOrder(t *testing.T) {
@@ -70,26 +73,148 @@ func TestBTInOrder(t *testing.T) {
 	bt.Insert(7)
 	bt.Insert(12)
 	bt.Insert(17)
-	expected := []int{3, 5, 7, 10, 12, 15, 17}
+	want := "3 5 7 10 12 15 17"
 	// Act
 	got := bt.InOrder()
 	// Assert
-	for i, v := range got {
-		simpleAssert(t, expected[i], v)
-	}
+	util.SimpleAssert(t, got, want)
 }
 
 func TestBTInOrderEmpty(t *testing.T) {
 	// Arrange
 	bt := EmptyBinaryTree[int]()
+	want := ""
 	// Act
 	got := bt.InOrder()
 	// Assert
-	simpleAssert(t, 0, len(got))
+	util.SimpleAssert(t, got, want)
 }
 
-func simpleAssert[T comparable](t *testing.T, got, want T) {
-	if got != want {
-		t.Errorf("Expected %v, got %v", want, got)
+func TestBTToArrayReturnsArray(t *testing.T) {
+	// Arrange
+	bt := NewBinaryTree[int](10)
+	bt.Insert(5)
+	bt.Insert(15)
+	bt.Insert(3)
+	bt.Insert(7)
+	bt.Insert(12)
+	bt.Insert(17)
+	want := []int{3, 5, 7, 10, 12, 15, 17}
+	// Act
+	got := bt.ToArray()
+	// Assert
+	for i, v := range got {
+		util.SimpleAssert(t, want[i], v)
 	}
+}
+
+func TestBTToArrayEmpty(t *testing.T) {
+	// Arrange
+	bt := EmptyBinaryTree[int]()
+	// Act
+	got := bt.ToArray()
+	// Assert
+	if len(got) != 0 {
+		t.Errorf("Expected empty array, got %v", got)
+	}
+}
+
+func TestBTPreOrder(t *testing.T) {
+	// Arrange
+	bt := NewBinaryTree[int](10)
+	bt.Insert(5)
+	bt.Insert(15)
+	bt.Insert(3)
+	bt.Insert(7)
+	bt.Insert(12)
+	bt.Insert(17)
+	want := "10 5 3 7 15 12 17"
+	// Act
+	got := bt.PreOrder()
+	// Assert
+	util.SimpleAssert(t, got, want)
+}
+
+func TestBTPreOrderEmpty(t *testing.T) {
+	// Arrange
+	bt := EmptyBinaryTree[int]()
+	want := ""
+	// Act
+	got := bt.PreOrder()
+	// Assert
+	util.SimpleAssert(t, got, want)
+}
+
+func TestBTPostOrder(t *testing.T) {
+	// Arrange
+	bt := NewBinaryTree[int](10)
+	bt.Insert(5)
+	bt.Insert(15)
+	bt.Insert(3)
+	bt.Insert(7)
+	bt.Insert(12)
+	bt.Insert(17)
+	want := "3 7 5 12 17 15 10"
+	// Act
+	got := bt.PostOrder()
+	// Assert
+	util.SimpleAssert(t, got, want)
+}
+
+func TestBTPostOrderEmpty(t *testing.T) {
+	// Arrange
+	bt := EmptyBinaryTree[int]()
+	want := ""
+	// Act
+	got := bt.PostOrder()
+	// Assert
+	util.SimpleAssert(t, got, want)
+}
+
+func TestBinaryTree_Height(t *testing.T) {
+	// Arrange
+	bt := NewBinaryTree[int](10)
+	bt.Insert(5)
+	bt.Insert(15)
+	bt.Insert(3)
+	bt.Insert(7)
+	bt.Insert(6)
+	bt.Insert(12)
+	bt.Insert(17)
+	expected := 4
+	// Act
+	got := bt.Height()
+	// Assert
+	util.SimpleAssert(t, expected, got)
+}
+
+func TestBinaryTree_HeightEmptyTree(t *testing.T) {
+	// Arrange
+	bt := EmptyBinaryTree[int]()
+	expected := 0
+	// Act
+	got := bt.Height()
+	// Assert
+	util.SimpleAssert(t, expected, got)
+}
+
+func TestBinaryTree_HeightOneNode(t *testing.T) {
+	// Arrange
+	bt := NewBinaryTree[int](10)
+	expected := 1
+	// Act
+	got := bt.Height()
+	// Assert
+	util.SimpleAssert(t, expected, got)
+}
+
+func TestBinaryTree_HeightTwoNodes(t *testing.T) {
+	// Arrange
+	bt := NewBinaryTree[int](10)
+	bt.Insert(5)
+	expected := 2
+	// Act
+	got := bt.Height()
+	// Assert
+	util.SimpleAssert(t, expected, got)
 }
