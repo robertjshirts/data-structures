@@ -41,11 +41,15 @@ go test ./...
 - [x] Binary Tree
   - [x] Implementation
   - [x] Testing
-- [ ] AVL Tree
-  - [ ] Implementation
-  - [ ] Testing
-
+- [x] AVL Tree
+  - [x] Implementation
+  - [x] Testing
+- [x] Graphs
+  - [x] Implementation
+  - [x] Testing
+- [x] Minimum Spanning Tree (Prim's Algorithm)
+  - [x] Implementation
+  - [x] Testing
 
 # TODO
-- Add maze solver/graph
 - Update tests to use modern sub testing and tables. Look into that.

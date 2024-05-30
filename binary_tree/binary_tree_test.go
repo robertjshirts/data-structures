@@ -218,3 +218,28 @@ func TestBinaryTree_HeightTwoNodes(t *testing.T) {
 	// Assert
 	util.SimpleAssert(t, expected, got)
 }
+
+func TestBinaryTree_HeightThreeNodes(t *testing.T) {
+	// Arrange
+	bt := NewBinaryTree[int](10)
+	bt.Insert(5)
+	bt.Insert(15)
+	expected := 2
+	// Act
+	got := bt.Height()
+	// Assert
+	util.SimpleAssert(t, expected, got)
+}
+
+func TestBinaryTree_HeightFourNodes(t *testing.T) {
+	// Arrange
+	bt := NewBinaryTree[int](10)
+	bt.Insert(5)
+	bt.Insert(15)
+	bt.Insert(3)
+	expected := 3
+	// Act
+	got := bt.Height()
+	// Assert
+	util.SimpleAssert(t, expected, got)
+}

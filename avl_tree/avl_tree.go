@@ -70,6 +70,14 @@ func (avl *AVLTree[T]) Height() int {
 // ToArray returns a breadth-first traversal of the tree as an array.
 //
 // Time complexity: O(n)
+//
+// Pseudo Code:
+// 1. Make a multidimensional array as deep as the tree is tall
+// 2. Call a recursive function that accepts a layer value (start at 0), and the array
+// 3. In the recursive function, add the node's value to the correct row of the multidimensional array (gotten from the layer int)
+// 4. Call the recursive function on the left and right nodes, but pass layer + 1 as the layer value.
+// 5. After the recursive call finishes, add each of the arrays to one array from the top layer to the bottom
+// 6. Return the array
 func (avl *AVLTree[T]) ToArray() []T {
 	if avl.Root == nil {
 		return nil

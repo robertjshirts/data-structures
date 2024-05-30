@@ -1,6 +1,7 @@
 package avl_tree
 
 import (
+	"fmt"
 	"github.com/robertjshirts/data-structures/util"
 	"testing"
 )
@@ -269,6 +270,19 @@ func TestAVLTree_ContainsReturnsFalseOnEmptyTree(t *testing.T) {
 	got := avl.Contains(0)
 	// Assert
 	util.SimpleAssert(t, got, want)
+}
+
+func TestAVLTree_ToArrayReturnsCorrectArray2(t *testing.T) {
+	// Arrange
+	avl := NewAVLTree(10, 15, 5, 3, 6)
+	expectedArray := []int{10, 5, 15, 3, 6}
+	// Act
+	actualArray := avl.ToArray()
+	fmt.Printf("%v\n", actualArray)
+	// Assert
+	for i := 0; i < len(expectedArray); i++ {
+		util.SimpleAssert(t, actualArray[i], expectedArray[i])
+	}
 }
 
 func TestAVLTree_ToArrayReturnsCorrectArray(t *testing.T) {
